@@ -1,0 +1,139 @@
+---
+title: "MSc Statistics Challenge"
+subtitle: "Imperial College London"
+author: "Presented by Andrew Connell"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%/%total%"
+  extra_dependencies: ["mathtools", "amsmath", "amssymb"]
+  fig_caption: yes
+params:
+  name1: "Andrew" 
+  name2: "Andrew" 
+---
+
+```{r xaringanExtra, echo = FALSE}
+  xaringanExtra::use_progress_bar(color = "#035AA6", location = "bottom")
+```
+
+<!-- edit name1 and name2 in the YAML above -->
+
+# Overview
+
+<br />
+--
+
+* The data this year is collected from Spotify.
+
+--
+
+* I asked three people I know to provide me with their libraries (none of them are me).
+
+--
+
+* Your goal is to return a re-classification of what song came from what library.
+
+--
+
+* A song will belong to either $1, 2$ or all $3$ individuals.
+
+--
+
+* There are plenty of resources available online 
+--
+ (but this problem is slightly different!)
+--
+
+* You have until 5pm and I will answer emails throughout the day.
+
+--
+
+* Three prizes: 
+--
+ $\color{red}{ 1^{\mathrm{st}}: £1500}$, 
+--
+$\color{blue}{ 2^{\mathrm{nd}}: £600}$, 
+--
+and $\color{green}{ 3^{\mathrm{rd}}: £400}$.
+
+---
+
+# The Variables
+
+```{r block, dpi = 300, fig.width=10, fig.align='center', include=FALSE}
+library(reticulate)
+library(fmsb)
+
+spot <- read.csv("spotify.csv")
+feature <- spot[, c(4,5,7,9,10,11,12,13,14)]
+```
+
+```{r block2, dpi = 300, fig.width=10, fig.align='center', echo = FALSE, warning=FALSE, message=FALSE}
+library(knitr)
+ltr <- c(4:16)
+x <- spot[sample(1:length(spot[,1]), 2), ltr]
+
+kable(x[,1:5]) 
+```
+<br />
+```{r block3, dpi = 300, fig.width=10, fig.align='center', echo = FALSE, warning=FALSE, message=FALSE}
+kable(x[,6:9])
+```
+<br />
+```{r block4, dpi = 300, fig.width=10, fig.align='center', echo = FALSE, warning=FALSE, message=FALSE}
+kable(x[,10:13])
+```
+
+---
+
+# Visualising the Data
+
+```{r Radarchart, dpi = 300, fig.width=10, fig.align='center', eval = TRUE, echo = FALSE}
+library(reticulate)
+library(fmsb)
+
+spot <- read.csv("spotify.csv")
+feature <- spot[, c(4,5,7,9,10,11,12,13,14)]
+
+feature.plot <- function(x){
+  # Look at one song
+  One_Song <- as.data.frame(feature[x,])
+  colnames(One_Song) <- colnames(feature)
+  # set boundaries
+  mup <- mapply(max, feature); mdown <- mapply(min, feature)
+  #
+  data <- rbind(mup, mdown, One_Song)
+  radarchart(data)
+}
+# Choose a song and use the function below
+feature.plot(1:10)
+```
+
+---
+
+# The Website
+
+<br />
+
+The website is available here:       [http://shiny2.ma.ic.ac.uk/users/amc19/MSc/](http://shiny2.ma.ic.ac.uk/users/amc19/MSc/)
+
+--
+
+&nbsp;
+
+- The training data set can be used to rank your scores.
+
+--
+
+&nbsp;
+
+- You will receive a percentage accuracy score.
+
+--
+
+&nbsp;
+
+- We will ask the top three teams to submit their code so we can verify their models.
